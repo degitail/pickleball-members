@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理者ページ｜ふわっと</title>
+<link rel="icon" type="image/png" href="assets/icon-32.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="inner">
+    <div class="brand"><img src="assets/icon-512.png" alt="">ふわっと 管理者</div>
+    <div class="header-actions">
+      <a class="btn btn-outline btn-sm" href="app.html">メンバーページへ</a>
+      <button class="btn btn-outline btn-sm" id="btn-logout" type="button">ログアウト</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- メンバー管理 -->
+  <div class="card">
+    <h2>メンバー管理</h2>
+    <div class="table-scroll">
+      <table class="list" id="member-table">
+        <thead>
+          <tr><th>名前</th><th>メール</th><th>レベル</th><th>経験年数</th><th>権限</th><th>状態</th><th>操作</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="muted mt">「無効化」すると本人はログインできなくなります（除名）。復帰させる場合は「有効化」してください。</p>
+  </div>
+
+  <!-- 予定作成 -->
+  <div class="card">
+    <h2>予定の作成</h2>
+    <form id="form-event">
+      <div class="row">
+        <div class="field grow">
+          <label for="ev-title">名称</label>
+          <input id="ev-title" type="text" value="練習" required maxlength="40">
+        </div>
+        <div class="field grow">
+          <label for="ev-location">場所</label>
+          <input id="ev-location" type="text" placeholder="例: 〇〇体育館" maxlength="60">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="ev-date">日付</label>
+          <input id="ev-date" type="date" required>
+        </div>
+        <div class="field">
+          <label for="ev-start">開始</label>
+          <input id="ev-start" type="time" value="19:00" required>
+        </div>
+        <div class="field">
+          <label for="ev-end">終了</label>
+          <input id="ev-end" type="time" value="21:00" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="ev-repeat">繰り返し</label>
+          <select id="ev-repeat">
+            <option value="none">なし（1回のみ）</option>
+            <option value="weekly">毎週</option>
+            <option value="biweekly">隔週</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="ev-repeat-count">繰り返し回数</label>
+          <select id="ev-repeat-count">
+            <option value="4">4回</option>
+            <option value="8">8回</option>
+            <option value="12">12回</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="ev-note">メモ（任意）</label>
+        <textarea id="ev-note" rows="2" placeholder="持ち物や連絡事項など"></textarea>
+      </div>
+      <p class="form-msg" id="event-msg"></p>
+      <button class="btn btn-primary" type="submit">予定を登録する</button>
+    </form>
+  </div>
+
+  <!-- 予定一覧・コート振り分け -->
+  <div class="card">
+    <h2>今後の予定とコート振り分け</h2>
+    <div id="admin-ev-list"></div>
+  </div>
+
+  <!-- コート振り分けパネル -->
+  <div class="card hidden" id="assign-panel">
+    <h2 id="as-title"></h2>
+    <p id="as-participants" class="muted"></p>
+    <div class="row">
+      <div class="field">
+        <label for="as-courts">使用コート数</label>
+        <select id="as-courts">
+          <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="as-rounds">ゲーム数（ローテーション回数）</label>
+        <select id="as-rounds">
+          <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option>
+        </select>
+      </div>
+    </div>
+    <p class="form-msg" id="as-msg"></p>
+    <div class="row">
+      <button class="btn btn-primary" id="btn-run-assign" type="button">自動振り分けを実行</button>
+      <button class="btn btn-danger hidden" id="btn-clear-assign" type="button">振り分けを削除</button>
+      <button class="btn btn-outline" id="btn-close-assign" type="button">閉じる</button>
+    </div>
+    <div id="as-result" class="mt"></div>
+  </div>
+</main>
+
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

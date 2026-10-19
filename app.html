@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>メンバーページ｜ふわっと</title>
+<link rel="icon" type="image/png" href="assets/icon-32.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="inner">
+    <div class="brand"><img src="assets/icon-512.png" alt="">ふわっと メンバー</div>
+    <div class="header-actions">
+      <span class="who" id="who"></span>
+      <a class="btn btn-outline btn-sm hidden" id="btn-admin" href="admin.html">管理者ページ</a>
+      <button class="btn btn-outline btn-sm" id="btn-logout" type="button">ログアウト</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- プロフィール -->
+  <div class="card">
+    <h2>マイプロフィール</h2>
+    <div class="row">
+      <div class="grow">
+        <div><strong id="pf-name"></strong> <span id="pf-level" class="tag"></span> <span id="pf-role" class="tag tag-admin hidden">管理者</span></div>
+        <div class="muted" id="pf-email"></div>
+      </div>
+      <button class="btn btn-outline btn-sm" id="btn-edit-profile" type="button">編集</button>
+    </div>
+    <form id="form-profile" class="hidden mt">
+      <div class="field">
+        <label for="ed-name">お名前</label>
+        <input id="ed-name" type="text" required maxlength="30">
+      </div>
+      <div class="field">
+        <label for="ed-years">経験年数</label>
+        <select id="ed-years">
+          <option value="0">経験なし（未経験）</option>
+          <option value="0.5">1年未満</option>
+          <option value="1">1年くらい</option>
+          <option value="2">2年くらい</option>
+          <option value="3">3年くらい</option>
+          <option value="5">4〜6年</option>
+          <option value="8">7年以上</option>
+        </select>
+      </div>
+      <p class="form-msg" id="profile-msg"></p>
+      <div class="row">
+        <button class="btn btn-primary btn-sm" type="submit">保存</button>
+        <button class="btn btn-outline btn-sm" id="btn-cancel-profile" type="button">キャンセル</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- シャトル価格 -->
+  <div class="card">
+    <h2>シャトル平均価格 🏸</h2>
+    <div class="price-card">
+      <span class="price-big" id="price-value">—</span>
+      <span class="muted" id="price-note">データ取得中…</span>
+    </div>
+    <p class="muted mt">Yahoo!ショッピング上のナイロン/水鳥シャトル販売価格から算出した1個あたりの平均価格です。参加費見直しの参考にしています。</p>
+  </div>
+
+  <!-- カレンダー -->
+  <div class="card">
+    <h2>練習カレンダー</h2>
+    <div class="cal-head">
+      <button class="btn btn-outline btn-sm" id="cal-prev" type="button">← 前月</button>
+      <span class="month" id="cal-month"></span>
+      <button class="btn btn-outline btn-sm" id="cal-next" type="button">翌月 →</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <p class="muted mt">予定をタップすると詳細と出欠登録が表示されます。緑色は参加登録済みの予定です。</p>
+    <div id="ev-list"></div>
+  </div>
+
+  <!-- 予定詳細 -->
+  <div class="card hidden" id="ev-detail">
+    <h2 id="evd-title"></h2>
+    <p id="evd-meta"></p>
+    <p id="evd-note" class="muted"></p>
+    <p class="mt"><strong>参加予定: <span id="evd-count">0</span>名</strong></p>
+    <p class="form-msg" id="evd-msg"></p>
+    <div class="row mt">
+      <button class="btn btn-primary" id="btn-join" type="button">参加する</button>
+      <button class="btn btn-danger hidden" id="btn-leave" type="button">参加を取り消す</button>
+      <button class="btn btn-outline" id="btn-close-detail" type="button">閉じる</button>
+    </div>
+    <!-- コート割り -->
+    <div id="evd-courts" class="hidden">
+      <h3>コート割り</h3>
+      <p id="evd-mynum"></p>
+      <div id="evd-court-grid"></div>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ログイン｜ふわっと メンバーサイト</title>
+<link rel="icon" type="image/png" href="assets/icon-32.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-wrap">
+  <img class="auth-logo" src="assets/logo-full.png" alt="バドミントンサークル「ふわっと」">
+
+  <div class="card">
+    <div class="tabs">
+      <button id="tab-login" class="active" type="button">ログイン</button>
+      <button id="tab-signup" type="button">新規登録</button>
+    </div>
+
+    <!-- ログイン -->
+    <form id="form-login">
+      <div class="field">
+        <label for="login-email">メールアドレス</label>
+        <input id="login-email" type="email" required autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="login-pass">パスワード</label>
+        <input id="login-pass" type="password" required autocomplete="current-password">
+      </div>
+      <p class="form-msg" id="login-msg"></p>
+      <button class="btn btn-primary" style="width:100%" type="submit">ログイン</button>
+      <p class="center mt"><a href="#" id="link-forgot">パスワードをお忘れですか？</a></p>
+    </form>
+
+    <!-- 新規登録 -->
+    <form id="form-signup" class="hidden">
+      <div class="field">
+        <label for="su-name">お名前（ニックネーム可）</label>
+        <input id="su-name" type="text" required maxlength="30">
+      </div>
+      <div class="field">
+        <label for="su-email">メールアドレス</label>
+        <input id="su-email" type="email" required autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="su-pass">パスワード（8文字以上）</label>
+        <input id="su-pass" type="password" required minlength="8" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label for="su-years">バドミントン経験年数</label>
+        <select id="su-years" required>
+          <option value="0">経験なし（未経験）</option>
+          <option value="0.5">1年未満</option>
+          <option value="1">1年くらい</option>
+          <option value="2">2年くらい</option>
+          <option value="3">3年くらい</option>
+          <option value="5">4〜6年</option>
+          <option value="8">7年以上</option>
+        </select>
+        <p class="muted">経験年数に応じてレベルタグ（未経験者/初心者/中級/中上級）が自動で付きます</p>
+      </div>
+      <p class="form-msg" id="signup-msg"></p>
+      <button class="btn btn-primary" style="width:100%" type="submit">登録する</button>
+    </form>
+
+    <!-- パスワード再設定メール -->
+    <form id="form-forgot" class="hidden">
+      <p class="muted" style="margin-bottom:12px">登録済みのメールアドレスを入力してください。パスワード再設定用のリンクをお送りします。</p>
+      <div class="field">
+        <label for="fg-email">メールアドレス</label>
+        <input id="fg-email" type="email" required autocomplete="email">
+      </div>
+      <p class="form-msg" id="forgot-msg"></p>
+      <button class="btn btn-primary" style="width:100%" type="submit">再設定メールを送る</button>
+      <p class="center mt"><a href="#" id="link-back">ログインに戻る</a></p>
+    </form>
+  </div>
+
+  <p class="center muted"><a href="https://yoshidotfun.github.io/fuwatto-badminton/">サークル紹介ページはこちら</a></p>
+</div>
+
+<script type="module">
+import { supa, currentProfile } from "./js/supa.js";
+
+const $ = (id) => document.getElementById(id);
+const forms = { login: $("form-login"), signup: $("form-signup"), forgot: $("form-forgot") };
+const tabs = { login: $("tab-login"), signup: $("tab-signup") };
+
+function show(name) {
+  Object.entries(forms).forEach(([k, f]) => f.classList.toggle("hidden", k !== name));
+  tabs.login.classList.toggle("active", name === "login");
+  tabs.signup.classList.toggle("active", name === "signup");
+}
+tabs.login.onclick = () => show("login");
+tabs.signup.onclick = () => show("signup");
+$("link-forgot").onclick = (e) => { e.preventDefault(); show("forgot"); };
+$("link-back").onclick = (e) => { e.preventDefault(); show("login"); };
+
+function msg(id, text, ok = false) {
+  const el = $(id);
+  el.textContent = text;
+  el.className = "form-msg " + (ok ? "ok" : "err");
+}
+
+forms.login.onsubmit = async (e) => {
+  e.preventDefault();
+  msg("login-msg", "");
+  const { error } = await supa.auth.signInWithPassword({
+    email: $("login-email").value.trim(),
+    password: $("login-pass").value,
+  });
+  if (error) {
+    msg("login-msg", error.message.includes("Invalid login")
+      ? "メールアドレスまたはパスワードが違います"
+      : "ログインできませんでした: " + error.message);
+    return;
+  }
+  location.href = "app.html";
+};
+
+forms.signup.onsubmit = async (e) => {
+  e.preventDefault();
+  msg("signup-msg", "");
+  const { error } = await supa.auth.signUp({
+    email: $("su-email").value.trim(),
+    password: $("su-pass").value,
+    options: {
+      data: {
+        name: $("su-name").value.trim(),
+        experience_years: Number($("su-years").value),
+      },
+    },
+  });
+  if (error) {
+    msg("signup-msg", error.message.includes("already registered")
+      ? "このメールアドレスは登録済みです"
+      : "登録できませんでした: " + error.message);
+    return;
+  }
+  msg("signup-msg", "確認メールを送信しました。メール内のリンクを開いて登録を完了してください。", true);
+  forms.signup.reset();
+};
+
+forms.forgot.onsubmit = async (e) => {
+  e.preventDefault();
+  msg("forgot-msg", "");
+  const redirect = location.href.replace(/index\.html.*$/, "").replace(/\/?$/, "/") + "reset.html";
+  const { error } = await supa.auth.resetPasswordForEmail($("fg-email").value.trim(), {
+    redirectTo: redirect,
+  });
+  if (error) {
+    msg("forgot-msg", "送信できませんでした: " + error.message);
+    return;
+  }
+  msg("forgot-msg", "再設定メールを送信しました。メールをご確認ください。", true);
+};
+
+// ボタンをすべて有効化してから、ログイン状態を確認する
+const existing = await currentProfile();
+if (existing) location.replace("app.html");
+</script>
+</body>
+</html>

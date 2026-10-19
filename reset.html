@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>パスワード再設定｜ふわっと メンバーサイト</title>
+<link rel="icon" type="image/png" href="assets/icon-32.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-wrap">
+  <img class="auth-logo" src="assets/logo-full.png" alt="バドミントンサークル「ふわっと」">
+
+  <div class="card">
+    <h2>新しいパスワードの設定</h2>
+    <form id="form-reset">
+      <div class="field">
+        <label for="rs-pass">新しいパスワード（8文字以上）</label>
+        <input id="rs-pass" type="password" required minlength="8" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label for="rs-pass2">新しいパスワード（確認）</label>
+        <input id="rs-pass2" type="password" required minlength="8" autocomplete="new-password">
+      </div>
+      <p class="form-msg" id="reset-msg"></p>
+      <button class="btn btn-primary" style="width:100%" type="submit">パスワードを変更する</button>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+import { supa } from "./js/supa.js";
+
+const $ = (id) => document.getElementById(id);
+function msg(text, ok = false) {
+  const el = $("reset-msg");
+  el.textContent = text;
+  el.className = "form-msg " + (ok ? "ok" : "err");
+}
+
+// メールのリンクから来るとURLにトークンが付与され、セッションが確立される
+let ready = false;
+supa.auth.onAuthStateChange((event) => {
+  if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") ready = true;
+});
+const { data: { session } } = await supa.auth.getSession();
+if (session) ready = true;
+
+$("form-reset").onsubmit = async (e) => {
+  e.preventDefault();
+  if ($("rs-pass").value !== $("rs-pass2").value) {
+    msg("パスワードが一致しません");
+    return;
+  }
+  if (!ready) {
+    msg("リンクの有効期限が切れている可能性があります。もう一度再設定メールを送ってください。");
+    return;
+  }
+  const { error } = await supa.auth.updateUser({ password: $("rs-pass").value });
+  if (error) {
+    msg("変更できませんでした: " + error.message);
+    return;
+  }
+  msg("パスワードを変更しました。メンバーページへ移動します…", true);
+  setTimeout(() => location.href = "app.html", 1200);
+};
+</script>
+</body>
+</html>
