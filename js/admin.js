@@ -220,7 +220,22 @@ async function showExistingAssignment() {
     .eq("event_id", assignEvent.id)
     .order("round").order("court").order("slot");
   $("btn-clear-assign").classList.toggle("hidden", !(rows && rows.length));
-  if (rows && rows.length) renderAssignment(rows);
+  if (rows && rows.length) {
+    renderAssignment(rows);
+    // 振り分け後の参加取り消し・追加を検出
+    const assigned = new Set(rows.map((r) => r.user_id));
+    const current = new Set(assignParticipants.map((p) => p.user_id));
+    const nameOf = (id) => members.find((x) => x.id === id)?.name ?? "（不明）";
+    const left = [...assigned].filter((id) => !current.has(id)).map(nameOf);
+    const joined = [...current].filter((id) => !assigned.has(id)).map(nameOf);
+    const notes = [];
+    if (left.length) notes.push(`取り消した人: ${left.join("、")}`);
+    if (joined.length) notes.push(`後から参加した人: ${joined.join("、")}`);
+    if (notes.length) {
+      $("as-msg").textContent = `⚠ 参加者がコート割りと合っていません（${notes.join(" / ")}）。振り分け直してください。`;
+      $("as-msg").className = "form-msg err";
+    }
+  }
 }
 
 $("btn-clear-assign").onclick = async () => {

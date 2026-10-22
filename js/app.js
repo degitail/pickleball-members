@@ -206,6 +206,13 @@ $("btn-join").onclick = async () => {
 };
 
 $("btn-leave").onclick = async () => {
+  const { data: assigned } = await supa
+    .from("court_assignments")
+    .select("id")
+    .eq("event_id", currentEvent.id)
+    .eq("user_id", profile.id)
+    .limit(1);
+  if (assigned?.length && !confirm("この日はコート割りが決まっています。取り消すと管理者に振り分け直してもらう必要があります。取り消しますか？")) return;
   const { error } = await supa
     .from("event_participants")
     .delete()
@@ -222,6 +229,7 @@ $("btn-leave").onclick = async () => {
   updateJoinButtons();
   renderCalendar();
   renderList();
+  renderCourts(currentEvent.id);
 };
 
 // ---------- コート割り表示 ----------
@@ -241,7 +249,9 @@ async function renderCourts(eventId) {
   }
 
   const mine = rows.find((r) => r.user_id === profile.id);
-  $("evd-mynum").innerHTML = mine
+  $("evd-mynum").innerHTML = mine && !joinedSet.has(eventId)
+    ? "参加を取り消しています。管理者が振り分け直すまで、下の表にはあなたの番号が残ります"
+    : mine
     ? `あなたの番号は <strong style="font-size:1.3em">${mine.member_number}番</strong> です`
     : "あなたはこの日のコート割りに含まれていません（参加登録後に管理者が再割り当てすると反映されます）";
 
