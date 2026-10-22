@@ -57,6 +57,19 @@
     </form>
   </div>
 
+  <!-- カレンダー -->
+  <div class="card">
+    <h2>練習カレンダー</h2>
+    <div class="cal-head">
+      <button class="btn btn-outline btn-sm" id="cal-prev" type="button">← 前月</button>
+      <span class="month" id="cal-month"></span>
+      <button class="btn btn-outline btn-sm" id="cal-next" type="button">翌月 →</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <p class="muted mt">予定をタップすると詳細と出欠登録が表示されます。緑色は参加登録済みの予定です。</p>
+    <div id="ev-list"></div>
+  </div>
+
   <!-- 予定詳細 -->
   <div class="card hidden" id="ev-detail">
     <h2 id="evd-title"></h2>
