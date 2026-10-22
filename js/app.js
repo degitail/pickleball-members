@@ -45,23 +45,6 @@ $("form-profile").onsubmit = async (e) => {
   $("form-profile").classList.add("hidden");
 };
 
-// ---------- シャトル平均価格 ----------
-(async () => {
-  const { data } = await supa
-    .from("shuttle_price")
-    .select("*")
-    .order("recorded_on", { ascending: false })
-    .limit(1);
-  if (data && data.length) {
-    const p = data[0];
-    $("price-value").textContent = "¥" + Math.round(p.avg_unit_price).toLocaleString();
-    const d = new Date(p.recorded_on + "T00:00:00");
-    $("price-note").textContent = `1個あたり / ${d.getMonth() + 1}月${d.getDate()}日時点・${p.item_count}商品から算出`;
-  } else {
-    $("price-note").textContent = "価格データはまだありません";
-  }
-})();
-
 // ---------- カレンダー ----------
 let viewYear, viewMonth; // month: 0-11
 let events = [];          // 表示中の月の予定

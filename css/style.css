@@ -180,3 +180,5 @@ table.list th { background: var(--mint-pale); color: var(--mint-deep); font-size
   .cal-cell { min-height: 52px; }
   .ev-when { min-width: auto; }
 }
+
+.auth-logo-text { text-align: center; color: var(--mint-deep); font-size: 2rem; font-weight: 800; margin: 0 0 20px; letter-spacing: 0.04em; }

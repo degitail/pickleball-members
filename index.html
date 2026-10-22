@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ログイン｜ふわっと メンバーサイト</title>
+<title>ログイン｜ピッ来るボール メンバーサイト</title>
 <link rel="icon" type="image/png" href="assets/icon-32.png">
 <link rel="apple-touch-icon" href="assets/icon-180.png">
 <link rel="stylesheet" href="css/style.css">
@@ -11,7 +11,7 @@
 <body>
 
 <div class="auth-wrap">
-  <img class="auth-logo" src="assets/logo-full.png" alt="バドミントンサークル「ふわっと」">
+  <h1 class="auth-logo-text">ピッ来るボール</h1>
 
   <div class="card">
     <div class="tabs">
@@ -49,7 +49,7 @@
         <input id="su-pass" type="password" required minlength="8" autocomplete="new-password">
       </div>
       <div class="field">
-        <label for="su-years">バドミントン経験年数</label>
+        <label for="su-years">ピックルボール経験年数</label>
         <select id="su-years" required>
           <option value="0">経験なし（未経験）</option>
           <option value="0.5">1年未満</option>
@@ -78,7 +78,7 @@
     </form>
   </div>
 
-  <p class="center muted"><a href="https://yoshidotfun.github.io/fuwatto-badminton/">サークル紹介ページはこちら</a></p>
+  <p class="center muted"><a href="https://yoshidotfun.github.io/pickleball/">サークル紹介ページはこちら</a></p>
 </div>
 
 <script type="module">
@@ -127,6 +127,7 @@ forms.signup.onsubmit = async (e) => {
     email: $("su-email").value.trim(),
     password: $("su-pass").value,
     options: {
+      emailRedirectTo: location.href.replace(/index\.html.*$/, "").replace(/\/?$/, "/") + "confirmed.html",
       data: {
         name: $("su-name").value.trim(),
         experience_years: Number($("su-years").value),
