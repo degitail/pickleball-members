@@ -234,3 +234,5 @@ create policy "shuttle_price_select" on public.shuttle_price
 -- 管理者が「終了にする」を押したゲーム番号を保存。会員画面で灰色表示に使う
 -- 既存の events の RLS（閲覧=有効メンバー / 更新=管理者）がそのまま効く
 alter table public.events add column if not exists done_rounds int[] not null default '{}';
+
+-- 追加（2026-10-23）: マイパドルの有無 → sql/2026-10-23_paddle.sql を参照

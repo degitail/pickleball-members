@@ -11,7 +11,7 @@
 <body>
 
 <div class="auth-wrap">
-  <h1 class="auth-logo-text">ピックルボール</h1>
+  <img class="auth-logo" src="assets/logo.svg" alt="ピックルボールサークル「ふわっと」">
 
   <div class="card">
     <div class="tabs">
@@ -60,6 +60,14 @@
           <option value="8">7年以上</option>
         </select>
         <p class="muted">経験年数に応じてレベルタグ（未経験者/初心者/中級/中上級）が自動で付きます</p>
+      </div>
+      <div class="field">
+        <label for="su-paddle">マイパドル（ラケット）</label>
+        <select id="su-paddle" required>
+          <option value="" selected disabled>選択してください</option>
+          <option value="true">持っている</option>
+          <option value="false">持っていない（貸出希望）</option>
+        </select>
       </div>
       <p class="form-msg" id="signup-msg"></p>
       <button class="btn btn-primary" style="width:100%" type="submit">登録する</button>
@@ -131,6 +139,7 @@ forms.signup.onsubmit = async (e) => {
       data: {
         name: $("su-name").value.trim(),
         experience_years: Number($("su-years").value),
+        has_paddle: $("su-paddle").value === "true",
       },
     },
   });

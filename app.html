@@ -29,6 +29,7 @@
       <div class="grow">
         <div><strong id="pf-name"></strong> <span id="pf-level" class="tag"></span> <span id="pf-role" class="tag tag-admin hidden">管理者</span></div>
         <div class="muted" id="pf-email"></div>
+        <div class="muted" id="pf-paddle"></div>
       </div>
       <button class="btn btn-outline btn-sm" id="btn-edit-profile" type="button">編集</button>
     </div>
@@ -47,6 +48,14 @@
           <option value="3">3年くらい</option>
           <option value="5">4〜6年</option>
           <option value="8">7年以上</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="ed-paddle">マイパドル（ラケット）</label>
+        <select id="ed-paddle">
+          <option value="">未回答</option>
+          <option value="true">持っている</option>
+          <option value="false">持っていない（貸出希望）</option>
         </select>
       </div>
       <p class="form-msg" id="profile-msg"></p>

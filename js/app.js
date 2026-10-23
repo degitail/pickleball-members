@@ -9,9 +9,12 @@ $("btn-logout").onclick = logout;
 $("who").textContent = profile.name;
 if (profile.role === "admin") $("btn-admin").classList.remove("hidden");
 
+const paddleLabel = (v) => (v == null ? "未回答" : v ? "持っている" : "持っていない");
+
 function renderProfile(p) {
   $("pf-name").textContent = p.name;
   $("pf-email").textContent = p.email;
+  $("pf-paddle").textContent = "マイパドル（ラケット）: " + paddleLabel(p.has_paddle);
   const lv = $("pf-level");
   lv.textContent = p.level;
   lv.className = "tag tag-" + p.level;
@@ -22,6 +25,7 @@ renderProfile(profile);
 $("btn-edit-profile").onclick = () => {
   $("ed-name").value = profile.name;
   $("ed-years").value = String(profile.experience_years);
+  $("ed-paddle").value = profile.has_paddle == null ? "" : String(profile.has_paddle);
   $("form-profile").classList.remove("hidden");
 };
 $("btn-cancel-profile").onclick = () => $("form-profile").classList.add("hidden");
@@ -30,7 +34,11 @@ $("form-profile").onsubmit = async (e) => {
   e.preventDefault();
   const { data, error } = await supa
     .from("profiles")
-    .update({ name: $("ed-name").value.trim(), experience_years: Number($("ed-years").value) })
+    .update({
+      name: $("ed-name").value.trim(),
+      experience_years: Number($("ed-years").value),
+      has_paddle: $("ed-paddle").value === "" ? null : $("ed-paddle").value === "true",
+    })
     .eq("id", profile.id)
     .select()
     .single();

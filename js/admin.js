@@ -34,6 +34,7 @@ async function loadMembers() {
       <td>${escapeHtml(m.email)}</td>
       <td><span class="tag tag-${m.level}">${m.level}</span></td>
       <td>${m.experience_years}年</td>
+      <td>${m.has_paddle == null ? '<span class="muted">未回答</span>' : m.has_paddle ? "あり" : "なし"}</td>
       <td>${m.role === "admin" ? '<span class="tag tag-admin">管理者</span>' : "メンバー"}</td>
       <td>${m.is_active ? "有効" : '<span style="color:var(--danger)">無効</span>'}</td>`;
     const td = document.createElement("td");
@@ -202,8 +203,11 @@ async function openAssign(ev) {
     return { user_id: id, name: m ? m.name : "（不明）" };
   });
 
+  const noPaddle = ids.filter((id) => members.find((x) => x.id === id)?.has_paddle === false)
+    .map((id) => members.find((x) => x.id === id).name);
   $("as-participants").textContent = assignParticipants.length
-    ? `参加者 ${assignParticipants.length}名: ` + assignParticipants.map((p) => p.name).join("、")
+    ? `参加者 ${assignParticipants.length}名: ` + assignParticipants.map((p) => p.name).join("、") +
+      ` ／ パドルなし（貸出）: ${noPaddle.length}名` + (noPaddle.length ? `（${noPaddle.join("、")}）` : "")
     : "まだ参加者がいません";
 
   await showExistingAssignment();
@@ -254,7 +258,8 @@ async function resetDoneRounds() {
 }
 
 // ペア・対戦の重複をできるだけ避けるランダム振り分け
-function buildAssignment(participants, courts, rounds) {
+// prev: 既存のコート割り / keepRounds: 終了済みでそのまま残すゲーム番号
+function buildAssignment(participants, courts, rounds, prev = [], keepRounds = new Set()) {
   const shuffle = (arr) => {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
@@ -269,11 +274,36 @@ function buildAssignment(participants, courts, rounds) {
   const restCount = {};
   participants.forEach((p) => (restCount[p.user_id] = 0));
 
-  // その日の番号を割り振り（ランダム）
-  const numbered = shuffle(participants).map((p, i) => ({ ...p, member_number: i + 1 }));
+  // 1試合分の組み合わせを、ペア・対戦・休憩の回数に記録する
+  const tally = (pA, pB) => {
+    partnerCount[key(pA[0].user_id, pA[1].user_id)] = (partnerCount[key(pA[0].user_id, pA[1].user_id)] ?? 0) + 1;
+    partnerCount[key(pB[0].user_id, pB[1].user_id)] = (partnerCount[key(pB[0].user_id, pB[1].user_id)] ?? 0) + 1;
+    pA.forEach((x) => pB.forEach((y) => {
+      oppCount[key(x.user_id, y.user_id)] = (oppCount[key(x.user_id, y.user_id)] ?? 0) + 1;
+    }));
+  };
 
-  const result = [];
+  // その日の番号: 既に番号がある人はそのまま、新しく来た人は続きの番号（ランダム順）
+  const prevNum = new Map(prev.map((r) => [r.user_id, r.member_number]));
+  let next = Math.max(0, ...prevNum.values());
+  const numbered = [
+    ...participants.filter((p) => prevNum.has(p.user_id)).map((p) => ({ ...p, member_number: prevNum.get(p.user_id) })),
+    ...shuffle(participants.filter((p) => !prevNum.has(p.user_id))).map((p) => ({ ...p, member_number: ++next })),
+  ];
+
+  // 終了済みのゲームはそのまま残し、回数の記録にも入れる
+  const result = prev.filter((r) => keepRounds.has(r.round)).map((r) => ({ ...r }));
+  [...keepRounds].forEach((round) => {
+    const inRound = result.filter((r) => r.round === round);
+    [...new Set(inRound.filter((r) => r.court > 0).map((r) => r.court))].forEach((court) => {
+      const c = inRound.filter((r) => r.court === court);
+      tally(c.filter((r) => r.slot <= 2), c.filter((r) => r.slot >= 3));
+    });
+    inRound.filter((r) => r.court === 0).forEach((r) => (restCount[r.user_id] = (restCount[r.user_id] ?? 0) + 1));
+  });
+
   for (let round = 1; round <= rounds; round++) {
+    if (keepRounds.has(round)) continue;
     const playingCount = Math.min(courts * 4, Math.floor(numbered.length / 4) * 4);
     // 休憩が少ない人から順に休憩に回す（全員の休憩回数を均等に）
     const byRest = shuffle(numbered).sort((a, b) => restCount[a.user_id] - restCount[b.user_id]);
@@ -314,11 +344,7 @@ function buildAssignment(participants, courts, rounds) {
       const court = i + 1;
       pA.forEach((p, s) => result.push({ round, court, slot: s + 1, ...p }));
       pB.forEach((p, s) => result.push({ round, court, slot: s + 3, ...p }));
-      partnerCount[key(pA[0].user_id, pA[1].user_id)] = (partnerCount[key(pA[0].user_id, pA[1].user_id)] ?? 0) + 1;
-      partnerCount[key(pB[0].user_id, pB[1].user_id)] = (partnerCount[key(pB[0].user_id, pB[1].user_id)] ?? 0) + 1;
-      pA.forEach((x) => pB.forEach((y) => {
-        oppCount[key(x.user_id, y.user_id)] = (oppCount[key(x.user_id, y.user_id)] ?? 0) + 1;
-      }));
+      tally(pA, pB);
     });
 
     resting.forEach((p, i) => {
@@ -326,7 +352,7 @@ function buildAssignment(participants, courts, rounds) {
       result.push({ round, court: 0, slot: i + 1, ...p });
     });
   }
-  return result;
+  return result.sort((a, b) => a.round - b.round || a.court - b.court || a.slot - b.slot);
 }
 
 $("btn-run-assign").onclick = async () => {
@@ -339,7 +365,12 @@ $("btn-run-assign").onclick = async () => {
   }
   const courts = Number($("as-courts").value);
   const rounds = Number($("as-rounds").value);
-  const rows = buildAssignment(assignParticipants, courts, rounds);
+  const { data: prev } = await supa
+    .from("court_assignments")
+    .select("round, court, slot, user_id, member_number")
+    .eq("event_id", assignEvent.id);
+  const keep = new Set(assignEvent.done_rounds ?? []);
+  const rows = buildAssignment(assignParticipants, courts, rounds, prev ?? [], keep);
 
   // 既存の割りを消してから保存
   await supa.from("court_assignments").delete().eq("event_id", assignEvent.id);
@@ -358,8 +389,9 @@ $("btn-run-assign").onclick = async () => {
     msgEl.className = "form-msg err";
     return;
   }
-  await resetDoneRounds();
-  msgEl.textContent = "振り分けを保存しました。メンバーの画面にも反映されています。";
+  msgEl.textContent = prev?.length
+    ? "番号はそのままで振り分け直しました（終了したゲームは変えていません）。メンバーの画面にも反映されています。"
+    : "振り分けを保存しました。メンバーの画面にも反映されています。";
   msgEl.className = "form-msg ok";
   $("btn-clear-assign").classList.remove("hidden");
   renderAssignment(rows);

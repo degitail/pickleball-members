@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="ピックルボールサークル ふわっと">
+  <defs>
+    <path id="arc" d="M30 100 a70 70 0 0 1 140 0"/>
+  </defs>
+  <circle cx="100" cy="100" r="92" fill="#fff" stroke="#c24d28" stroke-width="4"/>
+  <g transform="translate(100 98) scale(0.78)">
+    <circle r="62" fill="#ff7a4d"/>
+    <g transform="rotate(-35)">
+      <rect x="-22" y="-44" width="44" height="54" rx="20" fill="#fff"/>
+      <rect x="-6" y="8" width="12" height="30" rx="5" fill="#fff"/>
+    </g>
+    <circle cx="26" cy="-26" r="11" fill="#f2d64b"/>
+    <circle cx="23" cy="-29" r="2.2" fill="#c24d28"/>
+    <circle cx="30" cy="-24" r="2.2" fill="#c24d28"/>
+    <circle cx="23" cy="-21" r="2" fill="#c24d28"/>
+  </g>
+  <text font-family="'Hiragino Sans','Yu Gothic UI','Meiryo',sans-serif" font-size="13" font-weight="800" letter-spacing="3" fill="#c24d28"><textPath href="#arc" startOffset="50%" text-anchor="middle">PICKLEBALL</textPath></text>
+  <text x="100" y="172" text-anchor="middle" font-family="'Hiragino Maru Gothic ProN','Hiragino Sans','Yu Gothic UI','Meiryo',sans-serif" font-size="18" font-weight="800" letter-spacing="2" fill="#c24d28">ふわっと</text>
+</svg>
