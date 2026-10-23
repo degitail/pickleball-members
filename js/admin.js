@@ -241,9 +241,17 @@ async function showExistingAssignment() {
 $("btn-clear-assign").onclick = async () => {
   if (!confirm("この予定のコート割りを削除しますか？")) return;
   await supa.from("court_assignments").delete().eq("event_id", assignEvent.id);
+  await resetDoneRounds();
   $("as-result").innerHTML = "";
   $("btn-clear-assign").classList.add("hidden");
 };
+
+// 振り分けをやり直したら、ゲームの終了マークも消す
+async function resetDoneRounds() {
+  if (!assignEvent.done_rounds?.length) return;
+  await supa.from("events").update({ done_rounds: [] }).eq("id", assignEvent.id);
+  assignEvent.done_rounds = [];
+}
 
 // ペア・対戦の重複をできるだけ避けるランダム振り分け
 function buildAssignment(participants, courts, rounds) {
@@ -350,6 +358,7 @@ $("btn-run-assign").onclick = async () => {
     msgEl.className = "form-msg err";
     return;
   }
+  await resetDoneRounds();
   msgEl.textContent = "振り分けを保存しました。メンバーの画面にも反映されています。";
   msgEl.className = "form-msg ok";
   $("btn-clear-assign").classList.remove("hidden");
@@ -365,10 +374,28 @@ function renderAssignment(rows) {
     return m ? m.name : "?";
   };
   const rounds = [...new Set(rows.map((r) => r.round))];
+  const done = new Set(assignEvent.done_rounds ?? []);
   rounds.forEach((round) => {
+    const sec = document.createElement("div");
+    sec.className = "round-sec" + (done.has(round) ? " round-done" : "");
+    box.appendChild(sec);
     const h = document.createElement("h3");
-    h.textContent = `第${round}ゲーム`;
-    box.appendChild(h);
+    h.textContent = `第${round}ゲーム `;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn-outline btn-sm";
+    btn.textContent = done.has(round) ? "終了を取り消す" : "終了にする";
+    btn.onclick = async () => {
+      const next = new Set(assignEvent.done_rounds ?? []);
+      next.has(round) ? next.delete(round) : next.add(round);
+      const done_rounds = [...next].sort((a, b) => a - b);
+      const { error } = await supa.from("events").update({ done_rounds }).eq("id", assignEvent.id);
+      if (error) return alert("保存できませんでした: " + error.message);
+      assignEvent.done_rounds = done_rounds;
+      renderAssignment(rows);
+    };
+    h.appendChild(btn);
+    sec.appendChild(h);
     const wrap = document.createElement("div");
     wrap.className = "court-grid";
     const inRound = rows.filter((r) => r.round === round && r.court > 0);
@@ -385,13 +412,13 @@ function renderAssignment(rows) {
         </div>`;
       wrap.appendChild(el);
     });
-    box.appendChild(wrap);
+    sec.appendChild(wrap);
     const rest = rows.filter((r) => r.round === round && r.court === 0);
     if (rest.length) {
       const p = document.createElement("p");
       p.className = "rest-row muted";
       p.innerHTML = "休憩: " + rest.map((r) => `${r.member_number} ${escapeHtml(nameOf(r))}`).join(" / ");
-      box.appendChild(p);
+      sec.appendChild(p);
     }
   });
 }

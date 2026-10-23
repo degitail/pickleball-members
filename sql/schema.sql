@@ -229,3 +229,8 @@ create policy "assignments_admin_write" on public.court_assignments
 -- shuttle_price: ログイン済みなら閲覧可（書き込みはサーバーキーのみ＝ポリシー無し）
 create policy "shuttle_price_select" on public.shuttle_price
   for select using (auth.role() = 'authenticated');
+
+-- ---------- 追加（2026-10-22）: 終了したゲーム番号 ----------
+-- 管理者が「終了にする」を押したゲーム番号を保存。会員画面で灰色表示に使う
+-- 既存の events の RLS（閲覧=有効メンバー / 更新=管理者）がそのまま効く
+alter table public.events add column if not exists done_rounds int[] not null default '{}';

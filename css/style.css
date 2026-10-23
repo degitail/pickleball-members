@@ -182,3 +182,5 @@ table.list th { background: var(--mint-pale); color: var(--mint-deep); font-size
 }
 
 .auth-logo-text { text-align: center; color: var(--mint-deep); font-size: 2rem; font-weight: 800; margin: 0 0 20px; letter-spacing: 0.04em; }
+.round-done { opacity: 0.4; filter: grayscale(1); }
+.round-sec h3 .btn { margin-left: 8px; vertical-align: middle; }

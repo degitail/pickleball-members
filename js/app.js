@@ -258,11 +258,18 @@ async function renderCourts(eventId) {
   const grid = $("evd-court-grid");
   grid.innerHTML = "";
 
+  // 終了したゲームは最新状態を取り直して灰色にする
+  const { data: ev } = await supa.from("events").select("done_rounds").eq("id", eventId).single();
+  const done = new Set(ev?.done_rounds ?? []);
+
   const rounds = [...new Set(rows.map((r) => r.round))];
   rounds.forEach((round) => {
+    const sec = document.createElement("div");
+    sec.className = "round-sec" + (done.has(round) ? " round-done" : "");
+    grid.appendChild(sec);
     const h = document.createElement("h3");
-    h.textContent = `第${round}ゲーム`;
-    grid.appendChild(h);
+    h.textContent = `第${round}ゲーム` + (done.has(round) ? "（終了）" : "");
+    sec.appendChild(h);
 
     const courtsWrap = document.createElement("div");
     courtsWrap.className = "court-grid";
@@ -285,7 +292,7 @@ async function renderCourts(eventId) {
         </div>`;
       courtsWrap.appendChild(el);
     });
-    grid.appendChild(courtsWrap);
+    sec.appendChild(courtsWrap);
 
     const rest = rows.filter((r) => r.round === round && r.court === 0);
     if (rest.length) {
@@ -296,7 +303,7 @@ async function renderCourts(eventId) {
         rest
           .map((r) => `<span class="p-num${r.user_id === profile.id ? " me" : ""}">${r.member_number}</span>`)
           .join(" ");
-      grid.appendChild(p);
+      sec.appendChild(p);
     }
   });
 
