@@ -240,6 +240,12 @@ $("btn-leave").onclick = async () => {
   renderCourts(currentEvent.id);
 };
 
+$("btn-reload-courts").onclick = async (e) => {
+  e.target.disabled = true;
+  await renderCourts(currentEvent.id);
+  e.target.disabled = false;
+};
+
 // ---------- コート割り表示 ----------
 async function renderCourts(eventId) {
   const box = $("evd-courts");

@@ -215,6 +215,15 @@ async function openAssign(ev) {
   $("assign-panel").scrollIntoView({ behavior: "smooth" });
 }
 
+// 参加者・コート割り・終了マークを取り直す（他の管理者の操作や参加の変化を反映）
+$("btn-reload-assign").onclick = async (e) => {
+  e.target.disabled = true;
+  await loadMembers();
+  const { data: ev } = await supa.from("events").select("*").eq("id", assignEvent.id).single();
+  if (ev) await openAssign(ev);
+  e.target.disabled = false;
+};
+
 $("btn-close-assign").onclick = () => $("assign-panel").classList.add("hidden");
 
 async function showExistingAssignment() {
