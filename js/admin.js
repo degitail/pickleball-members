@@ -190,27 +190,7 @@ async function openAssign(ev) {
   $("as-title").textContent = `コート振り分け: ${ev.title}（${fmtDateTime(ev.starts_at)}）`;
   $("as-msg").textContent = "";
   $("as-result").innerHTML = "";
-
-  const { data: parts } = await supa
-    .from("event_participants")
-    .select("user_id")
-    .eq("event_id", ev.id);
-  const ids = (parts ?? []).map((p) => p.user_id);
-
-  // 管理者はprofilesを全件参照できるので名前を紐づけ
-  assignParticipants = ids.map((id) => {
-    const m = members.find((x) => x.id === id);
-    return { user_id: id, name: m ? m.name : "（不明）" };
-  });
-
-  const noPaddle = ids.filter((id) => members.find((x) => x.id === id)?.has_paddle === false)
-    .map((id) => members.find((x) => x.id === id).name);
-  $("as-participants").textContent = assignParticipants.length
-    ? `参加者 ${assignParticipants.length}名: ` + assignParticipants.map((p) => p.name).join("、") +
-      ` ／ パドルなし（貸出）: ${noPaddle.length}名` + (noPaddle.length ? `（${noPaddle.join("、")}）` : "")
-    : "まだ参加者がいません";
-
-  await showExistingAssignment();
+  await refreshParticipants();
   $("assign-panel").classList.remove("hidden");
   $("assign-panel").scrollIntoView({ behavior: "smooth" });
 }
@@ -222,6 +202,81 @@ $("btn-reload-assign").onclick = async (e) => {
   const { data: ev } = await supa.from("events").select("*").eq("id", assignEvent.id).single();
   if (ev) await openAssign(ev);
   e.target.disabled = false;
+};
+
+// 参加者を取り直して、一覧・追加候補・コート割りとのずれ警告を表示
+async function refreshParticipants() {
+  const { data: parts } = await supa
+    .from("event_participants")
+    .select("user_id")
+    .eq("event_id", assignEvent.id);
+  const ids = (parts ?? []).map((p) => p.user_id);
+
+  // 管理者はprofilesを全件参照できるので名前を紐づけ
+  assignParticipants = ids.map((id) => {
+    const m = members.find((x) => x.id === id);
+    return { user_id: id, name: m ? m.name : "（不明）" };
+  });
+
+  const noPaddle = ids.filter((id) => members.find((x) => x.id === id)?.has_paddle === false).length;
+  $("as-participants").textContent = assignParticipants.length
+    ? `参加者 ${assignParticipants.length}名 ／ パドルなし（貸出）: ${noPaddle}名`
+    : "まだ参加者がいません";
+
+  const list = $("as-plist");
+  list.innerHTML = "";
+  assignParticipants.forEach((p) => {
+    const m = members.find((x) => x.id === p.user_id);
+    const row = document.createElement("div");
+    row.className = "plist-row";
+    const info = document.createElement("span");
+    info.className = "grow";
+    info.textContent = p.name;
+    if (m) {
+      const tag = document.createElement("span");
+      tag.className = `tag tag-${m.level}`;
+      tag.style.marginLeft = "6px";
+      tag.textContent = m.level;
+      info.appendChild(tag);
+      if (m.has_paddle === false) info.append("　パドルなし");
+    }
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "btn btn-danger btn-sm";
+    del.textContent = "削除";
+    del.onclick = async () => {
+      if (!confirm(`${p.name} さんをこの日の参加者から外しますか？`)) return;
+      const { error } = await supa.from("event_participants").delete()
+        .eq("event_id", assignEvent.id).eq("user_id", p.user_id);
+      if (error) return alert("削除できませんでした: " + error.message);
+      await afterParticipantChange();
+    };
+    row.append(info, del);
+    list.appendChild(row);
+  });
+
+  // 追加候補: 有効な会員のうち、まだ参加していない人
+  const sel = $("as-add-select");
+  sel.innerHTML = '<option value="">会員を選んで追加…</option>';
+  members
+    .filter((m) => m.is_active && !ids.includes(m.id))
+    .forEach((m) => sel.add(new Option(`${m.name}（${m.level}）`, m.id)));
+
+  $("as-msg").textContent = "";
+  await showExistingAssignment();
+}
+
+async function afterParticipantChange() {
+  await refreshParticipants();
+  loadEvents(); // 予定一覧の参加人数も更新
+}
+
+$("btn-add-part").onclick = async () => {
+  const id = $("as-add-select").value;
+  if (!id) return;
+  const { error } = await supa.from("event_participants").insert({ event_id: assignEvent.id, user_id: id });
+  if (error) return alert("追加できませんでした: " + error.message);
+  await afterParticipantChange();
 };
 
 $("btn-close-assign").onclick = () => $("assign-panel").classList.add("hidden");

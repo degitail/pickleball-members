@@ -182,5 +182,8 @@ table.list th { background: var(--mint-pale); color: var(--mint-deep); font-size
 }
 
 .auth-logo-text { text-align: center; color: var(--mint-deep); font-size: 2rem; font-weight: 800; margin: 0 0 20px; letter-spacing: 0.04em; }
+.plist-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.plist-row .grow { min-width: 0; overflow-wrap: anywhere; }
+#as-add-select { padding: 8px; border: 1px solid var(--line); border-radius: 8px; min-width: 0; }
 .round-done { opacity: 0.4; filter: grayscale(1); }
 .round-sec h3 .btn { margin-left: 8px; vertical-align: middle; }

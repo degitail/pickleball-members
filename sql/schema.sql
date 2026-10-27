@@ -236,3 +236,5 @@ create policy "shuttle_price_select" on public.shuttle_price
 alter table public.events add column if not exists done_rounds int[] not null default '{}';
 
 -- 追加（2026-10-23）: マイパドルの有無 → sql/2026-10-23_paddle.sql を参照
+
+-- 追加（2026-10-27）: 管理者による参加者追加 → sql/2026-10-27_admin_add_participant.sql を参照
