@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="トランジションゾーンの図解">
+<rect x="60" y="10" width="200" height="190" rx="4" fill="#2e7d5b"/>
+<rect x="60" y="135" width="200" height="65" fill="#ff8c00" opacity="0.45"/>
+<rect x="60" y="75" width="200" height="60" fill="#3a9ad9" opacity="0.85"/>
+<line x1="60" y1="105" x2="260" y2="105" stroke="#ffffff" stroke-width="3"/>
+<line x1="160" y1="10" x2="160" y2="200" stroke="#ffffff" stroke-width="1" stroke-dasharray="4"/>
+<circle cx="215" cy="34" r="10" fill="#90caf9" stroke="#333333"/>
+<circle cx="130" cy="186" r="4" fill="#fff176"/>
+<circle cx="130" cy="163" r="4" fill="#fff176"/>
+<path d="M130 178 L130 170 M130 155 L130 146" stroke="#fff176" stroke-width="3" stroke-dasharray="3 2"/>
+<circle cx="130" cy="130" r="10" fill="#ffd54a" stroke="#333333"/>
+<text x="148" y="168" font-size="10" fill="#ffffff" font-weight="bold">途中で止まる</text>
+<text x="148" y="196" font-size="10" fill="#ffffff" font-weight="bold">トランジションゾーン</text>
+<text x="70" y="222" font-size="11" fill="#333333" font-weight="bold">前進は「打った球が稼いだ分」だけ</text>
+<text x="70" y="237" font-size="11" fill="#333333" font-weight="bold">止まって相手を見る（スプリットステップ）</text>
+</svg>

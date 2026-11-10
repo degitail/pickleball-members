@@ -2,6 +2,40 @@
 // 図解は assets/tactics/ に SVG ファイルを置き、image にそのパスを書きます。
 export const TACTICS_ISSUES = [
   {
+    vol: 3,
+    date: "2026-11-10",
+    title: "今週のピックルボール戦術 3選（Vol.3）",
+    items: [
+      {
+        title: "1. リセット",
+        image: "assets/tactics/vol3-01.svg",
+        imageAlt: "図解：相手の速い球をブロックしてキッチンへ落とすリセットのコート図",
+        body: "相手の速い球に打ち返そうとすると浮いて狙われます。リセットは、パドルを体の前に出したまま振らずにブロックし、勢いを消してキッチンへ柔らかく落とす守りのショットです。肘を体に寄せ、パドルの面は真っすぐに保ち、膝を曲げた低い姿勢で受けます。",
+        point: "実戦メモ：球が来る前にパドルを前に出しておく。「打つ」のではなく「受ける」意識で。",
+        sourceLabel: "The Dink「How to Master the Reset Shot in Pickleball」",
+        sourceUrl: "https://www.thedinkpickleball.com/how-to-master-the-reset-shot-in-pickleball/",
+      },
+      {
+        title: "2. トランジションゾーン",
+        image: "assets/tactics/vol3-02.svg",
+        imageAlt: "図解：ベースラインから止まりながら少しずつ前進するトランジションゾーンのコート図",
+        body: "ベースラインとキッチンの間は、住む場所ではなく通り抜ける場所です。前進できるのは、自分が打った球で相手を苦しくさせた分だけ。ドロップを打ったら2〜3歩進み、相手が打つ瞬間にスプリットステップで止まって返球を読み、進むか止まるかを決めます。攻め込まれたら無理に進まず、その場でリセットします。",
+        point: "実戦メモ：動きながら打たない。「打つ→進む→止まる」の繰り返しで少しずつ詰めます。",
+        sourceLabel: "The Dink「How to Avoid No Man's Land in Pickleball: Transition Zone Tips」",
+        sourceUrl: "https://www.thedinkpickleball.com/how-to-avoid-no-mans-land-in-pickleball-transition-zone-tips/",
+      },
+      {
+        title: "3. アーン (Erne)",
+        image: "assets/tactics/vol3-03.svg",
+        imageAlt: "図解：キッチンの角の外へ回り込んで打つアーンのコート図",
+        body: "キッチンの角を回り込むか飛び越えて、コートの外（サイドラインの外側）から打つ奇襲のボレーです。狙い目は、相手がストレートのディンクを繰り返し、その球が少し浮いた時で、相手がボールを見て頭を下げた瞬間に動きます。キッチンやそのラインに触れる・着地で踏む・ネットに触れるのは反則なので、相方に真ん中をカバーしてもらう約束も必須です。",
+        point: "実戦メモ：最初は飛ばずに「回り込む型」から。飛ぶ型は着地場所を先に確認してから試します。",
+        sourceLabel: "The Dink「Erne Pickleball: Setup, Jump & Legal Landing Explained」",
+        sourceUrl: "https://www.thedinkpickleball.com/erne-pickleball-setup-jump-legal-landing-explained/",
+      },
+    ],
+  },
+  {
     vol: 2,
     date: "2026-11-08",
     title: "今週のピックルボール戦術 3選（Vol.2）",
