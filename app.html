@@ -30,6 +30,7 @@
         <div><strong id="pf-name"></strong> <span id="pf-level" class="tag"></span> <span id="pf-role" class="tag tag-admin hidden">管理者</span></div>
         <div class="muted" id="pf-email"></div>
         <div class="muted" id="pf-paddle"></div>
+        <div class="mt-s"><span id="pf-count" class="muted"></span> <span id="pf-badge" class="tag tag-badge"></span></div>
       </div>
       <button class="btn btn-outline btn-sm" id="btn-edit-profile" type="button">編集</button>
     </div>
@@ -39,15 +40,13 @@
         <input id="ed-name" type="text" required maxlength="30">
       </div>
       <div class="field">
-        <label for="ed-years">経験年数</label>
-        <select id="ed-years">
-          <option value="0">経験なし（未経験）</option>
-          <option value="0.5">1年未満</option>
-          <option value="1">1年くらい</option>
-          <option value="2">2年くらい</option>
-          <option value="3">3年くらい</option>
-          <option value="5">4〜6年</option>
-          <option value="8">7年以上</option>
+        <label for="ed-level">レベル</label>
+        <select id="ed-level" required>
+          <option value="" disabled>選択してください</option>
+          <option value="未経験">未経験</option>
+          <option value="初級">初級</option>
+          <option value="中級">中級</option>
+          <option value="ラケット競技経験あり">ラケット競技経験あり（テニス・バドミントンなど）</option>
         </select>
       </div>
       <div class="field">

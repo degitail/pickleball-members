@@ -1,4 +1,4 @@
-import { supa, requireLogin, logout, fmtDate, fmtTime, fmtDateTime } from "./supa.js";
+import { supa, requireLogin, logout, fmtDate, fmtTime, fmtDateTime, levelOf, badgeOf, loadHandicaps, HANDICAP_HTML } from "./supa.js";
 
 const $ = (id) => document.getElementById(id);
 const profile = await requireLogin();
@@ -16,19 +16,37 @@ function renderProfile(p) {
   $("pf-email").textContent = p.email;
   $("pf-paddle").textContent = "マイパドル（ラケット）: " + paddleLabel(p.has_paddle);
   const lv = $("pf-level");
-  lv.textContent = p.level;
-  lv.className = "tag tag-" + p.level;
+  lv.textContent = levelOf(p);
+  lv.className = "tag tag-" + levelOf(p);
   if (p.role === "admin") $("pf-role").classList.remove("hidden");
 }
 renderProfile(profile);
 
+// 参加回数と称号
+const { data: attendCount } = await supa.rpc("my_attendance_count");
+$("pf-count").textContent = `参加 ${attendCount ?? 0}回`;
+const badge = badgeOf(attendCount ?? 0);
+if (badge) $("pf-badge").textContent = badge;
+
+// レベル未設定の人は、選ぶまで他の画面を使えない
+const needLevel = !profile.pb_level;
+const otherCards = [...document.querySelectorAll("main.wrap > .card")].slice(1);
+if (needLevel) {
+  otherCards.forEach((c) => c.classList.add("hidden"));
+  $("btn-cancel-profile").classList.add("hidden");
+}
+
 $("btn-edit-profile").onclick = () => {
   $("ed-name").value = profile.name;
-  $("ed-years").value = String(profile.experience_years);
+  $("ed-level").value = profile.pb_level ?? "";
   $("ed-paddle").value = profile.has_paddle == null ? "" : String(profile.has_paddle);
   $("form-profile").classList.remove("hidden");
 };
 $("btn-cancel-profile").onclick = () => $("form-profile").classList.add("hidden");
+if (needLevel) {
+  $("btn-edit-profile").click();
+  $("profile-msg").textContent = "レベルを選んで保存してください（選ぶまで他の画面は使えません）";
+}
 
 $("form-profile").onsubmit = async (e) => {
   e.preventDefault();
@@ -36,7 +54,7 @@ $("form-profile").onsubmit = async (e) => {
     .from("profiles")
     .update({
       name: $("ed-name").value.trim(),
-      experience_years: Number($("ed-years").value),
+      pb_level: $("ed-level").value,
       has_paddle: $("ed-paddle").value === "" ? null : $("ed-paddle").value === "true",
     })
     .eq("id", profile.id)
@@ -51,6 +69,7 @@ $("form-profile").onsubmit = async (e) => {
   Object.assign(profile, data);
   renderProfile(profile);
   $("form-profile").classList.add("hidden");
+  if (needLevel) location.reload(); // 他の画面を表示し直す
 };
 
 // ---------- カレンダー ----------
@@ -263,12 +282,14 @@ async function renderCourts(eventId) {
   }
 
   const mine = rows.find((r) => r.user_id === profile.id);
+  $("evd-mynum").className = mine && joinedSet.has(eventId) ? "my-num" : "";
   $("evd-mynum").innerHTML = mine && !joinedSet.has(eventId)
     ? "参加を取り消しています。管理者が振り分け直すまで、下の表にはあなたの番号が残ります"
     : mine
-    ? `あなたの番号は <strong style="font-size:1.3em">${mine.member_number}番</strong> です`
+    ? `<span>あなたの番号</span><strong>${mine.member_number}</strong><span>番</span>`
     : "あなたはこの日のコート割りに含まれていません（参加登録後に管理者が再割り当てすると反映されます）";
 
+  const handicaps = await loadHandicaps(eventId);
   const grid = $("evd-court-grid");
   grid.innerHTML = "";
 
@@ -298,11 +319,12 @@ async function renderCourts(eventId) {
       el.className = "court";
       const num = (r) =>
         `<span class="p-num${r.user_id === profile.id ? " me" : ""}">${r.member_number}</span>`;
+      const weak = handicaps[`${round}-${court}`];
       el.innerHTML = `
         <div class="court-name">コート${court}</div>
         <div class="pairs">
-          <div class="pair">${pairA.map(num).join("")}</div>
-          <div class="pair">${pairB.map(num).join("")}</div>
+          <div class="pair">${pairA.map(num).join("")}${weak === "A" ? HANDICAP_HTML : ""}</div>
+          <div class="pair">${pairB.map(num).join("")}${weak === "B" ? HANDICAP_HTML : ""}</div>
         </div>`;
       courtsWrap.appendChild(el);
     });

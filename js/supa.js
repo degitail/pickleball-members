@@ -46,3 +46,19 @@ export const fmtDateTime = (iso) => {
   const d = new Date(iso);
   return `${fmtDate(d)} ${fmtTime(d)}`;
 };
+
+// ピックルボール用のレベル（未選択なら「未設定」）
+export const levelOf = (p) => p.pb_level ?? "未設定";
+
+// 参加回数 → 称号（1回=初参加 / 5回=ビギナー卒業 / 10回=ヘビーユーザー）
+export const badgeOf = (n) =>
+  n >= 10 ? "🔥 ヘビーユーザー" : n >= 5 ? "🎓 ビギナー卒業" : n >= 1 ? "🌱 初参加" : null;
+
+// そのイベントのコートごとのハンデ（弱い側のペア）を { "round-court": "A"|"B" } で返す
+export async function loadHandicaps(eventId) {
+  const { data } = await supa.rpc("court_handicaps", { p_event: eventId });
+  const map = {};
+  (data ?? []).forEach((r) => { if (r.weak_pair) map[`${r.r_round}-${r.r_court}`] = r.weak_pair; });
+  return map;
+}
+export const HANDICAP_HTML = '<span class="handicap" title="ペアの経験差を埋めるルール。サーブミスを1回だけやり直せます">🛡 サーブミス1回OK</span>';

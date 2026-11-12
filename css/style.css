@@ -101,11 +101,23 @@ main { padding: 28px 0 64px; }
   display: inline-block; padding: 2px 12px; border-radius: 999px;
   font-size: 0.78rem; font-weight: 700; color: var(--white);
 }
+.tag-未経験 { background: #b8ceca; }
+.tag-初級 { background: var(--mint); }
+.tag-ラケット競技経験あり { background: #8e7cc3; }
+.tag-未設定 { background: #c9bdb7; }
 .tag-未経験者 { background: #b8ceca; }
 .tag-初心者 { background: var(--mint); }
 .tag-中級 { background: #5aa9d6; }
 .tag-中上級 { background: #8e7cc3; }
 .tag-admin { background: #e8a13c; }
+.tag-badge { background: #e8a13c; }
+.tag-badge:empty { display: none; }
+.mt-s { margin-top: 6px; }
+.handicap {
+  display: block; margin-top: 6px; padding: 3px 6px; border-radius: 8px;
+  background: #fff3d6; color: #8a5a00; border: 1.5px solid #e8a13c;
+  font-size: 0.72rem; font-weight: 700; line-height: 1.3;
+}
 
 /* ---------- calendar ---------- */
 .cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
@@ -156,7 +168,18 @@ main { padding: 28px 0 64px; }
   background: var(--white); border-radius: 8px; font-weight: 800; color: var(--ink);
   border: 1.5px solid var(--line);
 }
+.p-num.me {
+  display: inline-block; margin: 2px; min-width: 34px; padding: 4px 8px; border-radius: 8px;
+  background: var(--mint-dark); color: var(--white); border: 1.5px solid var(--mint-dark);
+  font-size: 1.25em; font-weight: 800; box-shadow: 0 0 0 3px var(--mint-pale);
+}
 .court .p-num.me { background: var(--mint-dark); color: var(--white); border-color: var(--mint-dark); }
+.my-num {
+  display: flex; align-items: baseline; justify-content: center; gap: 8px;
+  margin: 8px 0 14px; padding: 10px 16px; border-radius: 14px;
+  background: var(--mint-dark); color: var(--white); font-weight: 800;
+}
+.my-num strong { font-size: 3.2rem; line-height: 1; font-variant-numeric: tabular-nums; }
 .rest-row { margin-top: 10px; font-size: 0.88rem; }
 
 /* ---------- tables ---------- */

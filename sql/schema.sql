@@ -238,3 +238,5 @@ alter table public.events add column if not exists done_rounds int[] not null de
 -- 追加（2026-10-23）: マイパドルの有無 → sql/2026-10-23_paddle.sql を参照
 
 -- 追加（2026-10-27）: 管理者による参加者追加 → sql/2026-10-27_admin_add_participant.sql を参照
+
+-- 追加（2026-11-05）: ピックルボール用レベル → sql/2026-11-05_pb_level.sql を参照

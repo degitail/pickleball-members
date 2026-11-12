@@ -1,4 +1,4 @@
-import { supa, requireLogin, logout, fmtDate, fmtTime, fmtDateTime } from "./supa.js";
+import { supa, requireLogin, logout, fmtDate, fmtTime, fmtDateTime, levelOf, loadHandicaps, HANDICAP_HTML } from "./supa.js";
 
 const $ = (id) => document.getElementById(id);
 const profile = await requireLogin();
@@ -32,8 +32,7 @@ async function loadMembers() {
     tr.innerHTML = `
       <td>${escapeHtml(m.name)}</td>
       <td>${escapeHtml(m.email)}</td>
-      <td><span class="tag tag-${m.level}">${m.level}</span></td>
-      <td>${m.experience_years}年</td>
+      <td><span class="tag tag-${levelOf(m)}">${levelOf(m)}</span></td>
       <td>${m.has_paddle == null ? '<span class="muted">未回答</span>' : m.has_paddle ? "あり" : "なし"}</td>
       <td>${m.role === "admin" ? '<span class="tag tag-admin">管理者</span>' : "メンバー"}</td>
       <td>${m.is_active ? "有効" : '<span style="color:var(--danger)">無効</span>'}</td>`;
@@ -144,9 +143,12 @@ async function loadEvents() {
 
   const ids = upcoming.map((e) => e.id);
   const counts = {};
+  let assigned = new Set(); // コート割りがある予定
   if (ids.length) {
     const { data: cnts } = await supa.rpc("participant_counts", { event_ids: ids });
     (cnts ?? []).forEach((r) => (counts[r.event_id] = r.cnt));
+    const { data: asg } = await supa.from("court_assignments").select("event_id").in("event_id", ids);
+    assigned = new Set((asg ?? []).map((r) => r.event_id));
   }
 
   const list = $("admin-ev-list");
@@ -158,10 +160,10 @@ async function loadEvents() {
     item.innerHTML = `
       <span class="ev-when">${fmtDate(d)} ${fmtTime(d)}</span>
       <span class="grow"><span class="ev-title">${escapeHtml(e.title)}</span>
-        <span class="ev-meta">${escapeHtml(e.location)} / 参加 ${counts[e.id] ?? 0}名</span></span>`;
+        <span class="ev-meta">${escapeHtml(e.location)} / 参加 ${counts[e.id] ?? 0}名${assigned.has(e.id) ? " ・<strong>振り分け済み</strong>" : ""}</span></span>`;
     const assignBtn = document.createElement("button");
     assignBtn.className = "btn btn-primary btn-sm";
-    assignBtn.textContent = "コート振り分け";
+    assignBtn.textContent = assigned.has(e.id) ? "コート割りを見る" : "コート振り分け";
     assignBtn.onclick = () => openAssign(e);
     const delBtn = document.createElement("button");
     delBtn.className = "btn btn-danger btn-sm";
@@ -184,9 +186,11 @@ async function loadEvents() {
 // ============================================================
 let assignEvent = null;
 let assignParticipants = []; // {user_id, name}
+const LAST_ASSIGN_KEY = "last_assign_event"; // 開き直したときに同じ日のパネルを戻すため
 
 async function openAssign(ev) {
   assignEvent = ev;
+  try { localStorage.setItem(LAST_ASSIGN_KEY, ev.id); } catch {}
   $("as-title").textContent = `コート振り分け: ${ev.title}（${fmtDateTime(ev.starts_at)}）`;
   $("as-msg").textContent = "";
   $("as-result").innerHTML = "";
@@ -234,9 +238,9 @@ async function refreshParticipants() {
     info.textContent = p.name;
     if (m) {
       const tag = document.createElement("span");
-      tag.className = `tag tag-${m.level}`;
+      tag.className = `tag tag-${levelOf(m)}`;
       tag.style.marginLeft = "6px";
-      tag.textContent = m.level;
+      tag.textContent = levelOf(m);
       info.appendChild(tag);
       if (m.has_paddle === false) info.append("　パドルなし");
     }
@@ -260,7 +264,7 @@ async function refreshParticipants() {
   sel.innerHTML = '<option value="">会員を選んで追加…</option>';
   members
     .filter((m) => m.is_active && !ids.includes(m.id))
-    .forEach((m) => sel.add(new Option(`${m.name}（${m.level}）`, m.id)));
+    .forEach((m) => sel.add(new Option(`${m.name}（${levelOf(m)}）`, m.id)));
 
   $("as-msg").textContent = "";
   await showExistingAssignment();
@@ -279,7 +283,10 @@ $("btn-add-part").onclick = async () => {
   await afterParticipantChange();
 };
 
-$("btn-close-assign").onclick = () => $("assign-panel").classList.add("hidden");
+$("btn-close-assign").onclick = () => {
+  $("assign-panel").classList.add("hidden");
+  try { localStorage.removeItem(LAST_ASSIGN_KEY); } catch {}
+};
 
 async function showExistingAssignment() {
   const { data: rows } = await supa
@@ -312,6 +319,7 @@ $("btn-clear-assign").onclick = async () => {
   await resetDoneRounds();
   $("as-result").innerHTML = "";
   $("btn-clear-assign").classList.add("hidden");
+  loadEvents();
 };
 
 // 振り分けをやり直したら、ゲームの終了マークも消す
@@ -459,9 +467,11 @@ $("btn-run-assign").onclick = async () => {
   msgEl.className = "form-msg ok";
   $("btn-clear-assign").classList.remove("hidden");
   renderAssignment(rows);
+  loadEvents();
 };
 
-function renderAssignment(rows) {
+async function renderAssignment(rows) {
+  const handicaps = await loadHandicaps(assignEvent.id);
   const box = $("as-result");
   box.innerHTML = "";
   const nameOf = (r) => {
@@ -500,11 +510,12 @@ function renderAssignment(rows) {
       const cell = (r) => `<span class="p-num">${r.member_number} ${escapeHtml(nameOf(r))}</span>`;
       const el = document.createElement("div");
       el.className = "court";
+      const weak = handicaps[`${round}-${court}`];
       el.innerHTML = `
         <div class="court-name">コート${court}</div>
         <div class="pairs">
-          <div class="pair">${cRows.filter((r) => r.slot <= 2).map(cell).join("")}</div>
-          <div class="pair">${cRows.filter((r) => r.slot >= 3).map(cell).join("")}</div>
+          <div class="pair">${cRows.filter((r) => r.slot <= 2).map(cell).join("")}${weak === "A" ? HANDICAP_HTML : ""}</div>
+          <div class="pair">${cRows.filter((r) => r.slot >= 3).map(cell).join("")}${weak === "B" ? HANDICAP_HTML : ""}</div>
         </div>`;
       wrap.appendChild(el);
     });
@@ -522,3 +533,9 @@ function renderAssignment(rows) {
 // 初期ロード
 await loadMembers();
 await loadEvents();
+
+// 前回開いていた日のパネルを開き直す
+let lastAssignId = null;
+try { lastAssignId = localStorage.getItem(LAST_ASSIGN_KEY); } catch {}
+const lastAssign = upcoming.find((e) => e.id === lastAssignId);
+if (lastAssign) await openAssign(lastAssign);
