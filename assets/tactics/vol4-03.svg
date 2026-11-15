@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="シェイク・アンド・ベイクの図解">
+<rect x="60" y="10" width="200" height="190" rx="4" fill="#2e7d5b"/>
+<rect x="60" y="75" width="200" height="60" fill="#3a9ad9" opacity="0.85"/>
+<line x1="60" y1="105" x2="260" y2="105" stroke="#ffffff" stroke-width="3"/>
+<line x1="160" y1="10" x2="160" y2="200" stroke="#ffffff" stroke-width="1" stroke-dasharray="4"/>
+<circle cx="110" cy="88" r="10" fill="#ff8a80" stroke="#333333"/>
+<circle cx="208" cy="88" r="10" fill="#ff8a80" stroke="#333333"/>
+<circle cx="104" cy="184" r="10" fill="#ffd54a" stroke="#333333"/>
+<path d="M110 170 L112 102" stroke="#ff2222" stroke-width="5" marker-end="url(#r)"/>
+<path d="M198 96 Q188 108 182 116" stroke="#fff176" stroke-width="3" stroke-dasharray="4" fill="none"/>
+<circle cx="180" cy="120" r="5" fill="#ffffff" stroke="#333333"/>
+<circle cx="188" cy="168" r="10" fill="#ffd54a" stroke="#333333"/>
+<path d="M186 154 L181 128" stroke="#fff176" stroke-width="3" stroke-dasharray="4" fill="none" marker-end="url(#y)"/>
+<text x="70" y="222" font-size="11" fill="#333333" font-weight="bold">ドライブで浮かせて相方が仕留める</text>
+<text x="70" y="237" font-size="11" fill="#333333" font-weight="bold">深いリターンには無理せずドロップ</text>
+<defs><marker id="r" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#ff2222"/></marker><marker id="y" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#fff176"/></marker></defs>
+</svg>

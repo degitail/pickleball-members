@@ -2,6 +2,40 @@
 // 図解は assets/tactics/ に SVG ファイルを置き、image にそのパスを書きます。
 export const TACTICS_ISSUES = [
   {
+    vol: 4,
+    date: "2026-11-15",
+    title: "今週のピックルボール戦術 3選（Vol.4）",
+    items: [
+      {
+        title: "1. スピードアップ",
+        image: "assets/tactics/vol4-01.svg",
+        imageAlt: "図解：浮いた球だけを相手の体へ速く打つスピードアップのコート図",
+        body: "ディンクの応酬を終わらせる攻撃がスピードアップです。狙うのは、自分の側でネットの高さ以上に浮いた球だけ。ネットより低い球を無理に速く打つと、持ち上がって相手の胸元へ返ってしまいます。狙い目は相手の腰・お腹、バックハンド側の肩、クロスコートの角度の3つで、振りは大きくせず、手首と前腕のコンパクトな動きで下向きに打ちます。",
+        point: "実戦メモ：打った直後にパドルをすぐ構え直す。カウンターが返ってくる前提で。",
+        sourceLabel: "The Dink「Pickleball Speed Up: Step-by-Step Guide」",
+        sourceUrl: "https://www.thedinkpickleball.com/pickleball-speed-up-step-by-step-guide/",
+      },
+      {
+        title: "2. ATP（アラウンド・ザ・ポスト）",
+        image: "assets/tactics/vol4-02.svg",
+        imageAlt: "図解：ポストの外側を回して返すATPのコート図",
+        body: "相手に大きく外へ振られた球を、ネットの上ではなくポストの外側を回して返す合法のショットです。ネットを越えないので高さの制限がなく、低い球でも打てます。コツは焦らず、球が一番低く落ちるまで待ってから、ポストの外側からコントロールして打つことです。打った後はすぐに真ん中へ戻ります。",
+        point: "実戦メモ：Vol.3のアーンがキッチンの角を回り込む技なのに対し、ATPはネットポストの外を回る技です。",
+        sourceLabel: "The Dink「How to Hit an Around the Post Shot in Pickleball」",
+        sourceUrl: "https://www.thedinkpickleball.com/how-to-hit-around-the-post-pickleball/",
+      },
+      {
+        title: "3. シェイク・アンド・ベイク",
+        image: "assets/tactics/vol4-03.svg",
+        imageAlt: "図解：ドライブと前詰めを組み合わせるシェイク・アンド・ベイクのコート図",
+        body: "サーブ側の定番の連携プレーです。相手のリターンが浅く浮いたとき、一人（シェイカー）がサードショットを低く強くドライブし、もう一人（ベイカー）が同時にキッチンへ走り込みます。ドライブの狙いは決めることではなく、相手の浮いた弱い返球を引き出すこと。ベイカーはその浮いた球を5球目で仕留めます。",
+        point: "実戦メモ：深いリターンのときは無理せずドロップを選ぶ。走り込む合図を相方と決めておきます。",
+        sourceLabel: "Pickleball Union「How to Master the Shake and Bake in Pickleball」",
+        sourceUrl: "https://pickleballunion.com/shake-and-bake-in-pickleball/",
+      },
+    ],
+  },
+  {
     vol: 3,
     date: "2026-11-10",
     title: "今週のピックルボール戦術 3選（Vol.3）",
