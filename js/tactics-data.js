@@ -2,6 +2,40 @@
 // 図解は assets/tactics/ に SVG ファイルを置き、image にそのパスを書きます。
 export const TACTICS_ISSUES = [
   {
+    vol: 5,
+    date: "2026-11-22",
+    title: "今週のピックルボール戦術 3選（Vol.5）",
+    items: [
+      {
+        title: "1. スプリットステップ",
+        image: "assets/tactics/vol5-01.svg",
+        imageAlt: "図解：相手が打つ瞬間に小さく跳んで着地するスプリットステップのコート図",
+        body: "相手が球を打つ直前に小さく両足で跳び、着地した瞬間に構え直す足さばきです。タイミングの目安は球ではなく相手のパドルの振りで、パドルが前に出始めたら跳び始め、相手が球に当たる瞬間に着地します。跳びすぎず、肩幅・膝を軽く曲げ・つま先重心で着地すれば、どちらへでも一歩目が速く出せます。",
+        point: "実戦メモ：動きながら打たないための「止まる」技術。前進中も相手の打つ瞬間に必ず一度止まります。",
+        sourceLabel: "The Dink「Split Step Pickleball: The Ready Position Most Players Skip」",
+        sourceUrl: "https://www.thedinkpickleball.com/split-step-pickleball-the-ready-position-most-players-skip/",
+      },
+      {
+        title: "2. 攻撃ロブ",
+        image: "assets/tactics/vol5-02.svg",
+        imageAlt: "図解：ディンクのふりをして相手の頭上を抜く攻撃ロブのコート図",
+        body: "キッチンでのディンクの応酬から、相手が前にのめり込んだ瞬間に頭上を抜くショットです。コツは「バレないこと」で、構えやグリップはディンクとまったく同じに見せ、できるだけギリギリまで動きを遅らせます。狙いは相手のバックハンド側の肩の上を通してベースライン際へ。何度も使うと読まれるので、ここぞという時だけの一球です。",
+        point: "実戦メモ：相手がキッチンに張り付いて前に体重が乗った時が狙い目。風のある屋外では高さを控えめに。",
+        sourceLabel: "The Dink「How to Hit the Perfect Pickleball Lob Every Time」",
+        sourceUrl: "https://www.thedinkpickleball.com/for-the-perfect-lob-it-helps-to-be-a-little-ruthless/",
+      },
+      {
+        title: "3. ハンズバトル",
+        image: "assets/tactics/vol5-03.svg",
+        imageAlt: "図解：キッチンでの速い打ち合い（ハンズバトル）のコート図",
+        body: "キッチンでの速い打ち合い（ハンズバトル）は、手の速さより「読み」と構えが勝敗を分けます。相手の浮いたディンクや、パドルを低く落とす仕草が見えたら、速い球が来ると先読みしてパドルを胸の前・へそより上に構えます。反応するしかない時は無理に打ち返さず、グリップをゆるめて（10段階で3〜4）ブロックしてキッチンへ落とし、攻められる体勢なら短くカウンターします。",
+        point: "実戦メモ：「受けるか、返すか」を球が来る前に決めておく。迷った時はブロックが正解です。",
+        sourceLabel: "My Pickleball Connect「Pickleball hands battle」",
+        sourceUrl: "https://www.mypickleballconnect.com/guides/pickleball-hands-battle/",
+      },
+    ],
+  },
+  {
     vol: 4,
     date: "2026-11-15",
     title: "今週のピックルボール戦術 3選（Vol.4）",
