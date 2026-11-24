@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ルールQ&A｜ピックルボール</title>
+<link rel="icon" type="image/png" href="assets/icon-32.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .qa-hero { display:flex; gap:16px; align-items:center; }
+  .qa-hero img { width:96px; height:96px; flex:none; }
+  .qa-search { width:100%; padding:10px 12px; font-size:16px; box-sizing:border-box; }
+  .qa-cats { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .qa-cat { cursor:pointer; }
+  .qa-cat.active { background:#334155; color:#fff; }
+  .qa-item { border-top:1px solid #e5e7eb; padding:10px 0; }
+  .qa-q { width:100%; text-align:left; background:none; border:none; font-size:16px; font-weight:bold; cursor:pointer; padding:6px 0; }
+  .qa-a { padding:4px 0 8px; }
+  .qa-empty { padding:16px 0; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="inner">
+    <div class="brand"><img src="assets/icon-512.png" alt="">ピックルボール メンバー</div>
+    <div class="header-actions">
+      <span class="who" id="who"></span>
+      <a class="btn btn-outline btn-sm" href="app.html">メンバーページ</a>
+      <button class="btn btn-outline btn-sm" id="btn-logout" type="button">ログアウト</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="card">
+    <div class="qa-hero">
+      <img src="assets/qa/mascot.svg" alt="ルールQ&Aのマスコット">
+      <div>
+        <h2>ルールQ&amp;A</h2>
+        <p class="muted">よくあるルールの疑問をまとめました。質問をタップすると答えが開きます。キーワード検索とカテゴリ絞り込みもできます。ここに無いものは、その日の主催者に聞いてください。</p>
+      </div>
+    </div>
+    <div class="mt">
+      <input class="qa-search" id="qa-search" type="search" placeholder="キーワードで探す（例：キッチン、サーブ、得点）">
+    </div>
+    <div class="qa-cats" id="qa-cats"></div>
+  </div>
+  <div class="card">
+    <div id="qa-list"></div>
+    <p class="muted qa-empty hidden" id="qa-empty">見つかりませんでした。言葉を変えて探すか、主催者に確認してください。</p>
+  </div>
+</main>
+
+<script type="module" src="js/qa.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="パドルが顔のルールQ&amp;Aマスコットキャラクター">
+  <!-- speech bubble -->
+  <g>
+    <rect x="136" y="8" width="94" height="48" rx="15" fill="#ffffff" stroke="#334155" stroke-width="4"/>
+    <path d="M156 56 L148 74 L174 56 Z" fill="#ffffff" stroke="#334155" stroke-width="4" stroke-linejoin="round"/>
+    <text x="183" y="42" font-family="sans-serif" font-size="24" font-weight="bold" fill="#334155" text-anchor="middle">Q&amp;A</text>
+  </g>
+  <!-- paddle face -->
+  <g>
+    <rect x="52" y="18" width="124" height="142" rx="52" fill="#38bdf8" stroke="#334155" stroke-width="5"/>
+    <rect x="62" y="28" width="104" height="122" rx="44" fill="#7dd3fc"/>
+    <!-- handle -->
+    <rect x="98" y="158" width="32" height="52" rx="9" fill="#475569" stroke="#334155" stroke-width="4"/>
+    <line x1="100" y1="174" x2="128" y2="174" stroke="#334155" stroke-width="3"/>
+    <line x1="100" y1="188" x2="128" y2="188" stroke="#334155" stroke-width="3"/>
+    <line x1="100" y1="202" x2="128" y2="202" stroke="#334155" stroke-width="3"/>
+  </g>
+  <!-- eyelashes -->
+  <g stroke="#1f2937" stroke-width="4" stroke-linecap="round">
+    <line x1="76" y1="52" x2="68" y2="42"/>
+    <line x1="88" y1="48" x2="84" y2="36"/>
+    <line x1="100" y1="48" x2="102" y2="36"/>
+    <line x1="128" y1="48" x2="126" y2="36"/>
+    <line x1="140" y1="48" x2="144" y2="36"/>
+    <line x1="152" y1="52" x2="160" y2="42"/>
+  </g>
+  <!-- big round cartoon eyes -->
+  <g>
+    <ellipse cx="92" cy="76" rx="21" ry="27" fill="#ffffff" stroke="#1f2937" stroke-width="3.5"/>
+    <ellipse cx="136" cy="76" rx="21" ry="27" fill="#ffffff" stroke="#1f2937" stroke-width="3.5"/>
+    <circle cx="96" cy="80" r="10" fill="#38bdf8" stroke="#1f2937" stroke-width="2.5"/>
+    <circle cx="132" cy="80" r="10" fill="#38bdf8" stroke="#1f2937" stroke-width="2.5"/>
+    <circle cx="97" cy="81" r="5.5" fill="#111827"/>
+    <circle cx="131" cy="81" r="5.5" fill="#111827"/>
+    <circle cx="99" cy="78" r="2" fill="#ffffff"/>
+    <circle cx="133" cy="78" r="2" fill="#ffffff"/>
+  </g>
+  <!-- nose -->
+  <path d="M114 92 Q124 100 116 108" fill="none" stroke="#1f2937" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- freckled cheeks -->
+  <g fill="#b45309">
+    <circle cx="70" cy="108" r="2.2"/>
+    <circle cx="79" cy="112" r="2.2"/>
+    <circle cx="68" cy="116" r="2.2"/>
+    <circle cx="158" cy="108" r="2.2"/>
+    <circle cx="149" cy="112" r="2.2"/>
+    <circle cx="160" cy="116" r="2.2"/>
+  </g>
+  <circle cx="72" cy="122" r="9" fill="#f9a8d4" opacity="0.7"/>
+  <circle cx="156" cy="122" r="9" fill="#f9a8d4" opacity="0.7"/>
+  <!-- wide smile with two front teeth -->
+  <g>
+    <path d="M78 116 Q114 152 150 116 Q114 132 78 116 Z" fill="#7f1d1d" stroke="#1f2937" stroke-width="3.5" stroke-linejoin="round"/>
+    <g fill="#ffffff" stroke="#1f2937" stroke-width="2.5">
+      <rect x="102" y="128" width="11" height="13" rx="2"/>
+      <rect x="115" y="128" width="11" height="13" rx="2"/>
+    </g>
+  </g>
+  <!-- arms -->
+  <path d="M54 118 Q34 108 30 92" fill="none" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
+  <path d="M174 118 Q194 108 198 92" fill="none" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
+  <!-- small pickleball at the foot -->
+  <g>
+    <circle cx="196" cy="196" r="24" fill="#d9e94f" stroke="#7c9a1e" stroke-width="4"/>
+    <circle cx="188" cy="188" r="3.4" fill="#a9c22e"/>
+    <circle cx="202" cy="184" r="3.4" fill="#a9c22e"/>
+    <circle cx="206" cy="200" r="3.4" fill="#a9c22e"/>
+    <circle cx="190" cy="204" r="3.4" fill="#a9c22e"/>
+  </g>
+  <!-- feet -->
+  <ellipse cx="88" cy="222" rx="17" ry="7" fill="#334155"/>
+  <ellipse cx="140" cy="222" rx="17" ry="7" fill="#334155"/>
+</svg>
