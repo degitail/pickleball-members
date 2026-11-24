@@ -1,10 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="パドルが顔のルールQ&amp;Aマスコットキャラクター">
-  <!-- speech bubble -->
-  <g>
-    <rect x="136" y="8" width="94" height="48" rx="15" fill="#ffffff" stroke="#334155" stroke-width="4"/>
-    <path d="M156 56 L148 74 L174 56 Z" fill="#ffffff" stroke="#334155" stroke-width="4" stroke-linejoin="round"/>
-    <text x="183" y="42" font-family="sans-serif" font-size="24" font-weight="bold" fill="#334155" text-anchor="middle">Q&amp;A</text>
-  </g>
   <!-- paddle face -->
   <g>
     <rect x="52" y="18" width="124" height="142" rx="52" fill="#38bdf8" stroke="#334155" stroke-width="5"/>
@@ -70,4 +64,10 @@
   <!-- feet -->
   <ellipse cx="88" cy="222" rx="17" ry="7" fill="#334155"/>
   <ellipse cx="140" cy="222" rx="17" ry="7" fill="#334155"/>
+  <!-- speech bubble (drawn last, on top) -->
+  <g>
+    <rect x="140" y="4" width="94" height="46" rx="15" fill="#ffffff" stroke="#334155" stroke-width="4"/>
+    <path d="M160 50 L152 66 L178 50 Z" fill="#ffffff" stroke="#334155" stroke-width="4" stroke-linejoin="round"/>
+    <text x="187" y="36" font-family="sans-serif" font-size="23" font-weight="bold" fill="#334155" text-anchor="middle">Q&amp;A</text>
+  </g>
 </svg>
